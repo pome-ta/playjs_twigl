@@ -1,4 +1,9 @@
-# start log
+# play.js の挙動
+
+`index.js` を特別記述しなくても、`package.json`の`script:` で、node への指示ができてる
+
+
+## start log
 
 
 ```
@@ -50,7 +55,7 @@ Entrypoint script = script.js
 ```
 
 
-# build log
+## build log
  
 ```
 [ERR] `.bitly` not found.
@@ -92,7 +97,7 @@ For more info visit https://webpack.js.org/guides/code-splitting/
 
 
 
-# debug log
+## debug log
 
 ```
 [ERR] `.bitly` not found.
