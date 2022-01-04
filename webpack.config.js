@@ -74,3 +74,6 @@ module.exports = (env, argv) => {
     devtool: devmode,
   };
 };
+
+// todo: 最後に表示できないかしら？
+console.log(`Launching app... http://localhost:${port}` + '\n');
