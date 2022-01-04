@@ -5,15 +5,14 @@
 
 ## start log
 
-
 ```
 [ERR] `.bitly` not found.
 
 [OK] development build
 ℹ ｢wds｣: Project is running at http://localhost:9090/
 ℹ ｢wds｣: webpack output is served from /js/
-ℹ ｢wds｣: Content not from webpack is served from /private/var/mobile/Containers/Shared/AppGroup/A2F05B95-E190-4D22-B466-3FDBABAAFCE1/File Provider Storage/Repositories/playjs_twigl/public
-/private/var/mobile/Containers/Shared/AppGroup/A2F05B95-E190-4D22-B466-3FDBABAAFCE1/File Provider Storage/Repositories/playjs_twigl/node_modules/opn/xdg-open:1
+ℹ ｢wds｣: Content not from webpack is served from /private/var/mobile/Containers/Shared/AppGroup/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/File Provider Storage/Repositories/playjs_twigl/public
+/private/var/mobile/Containers/Shared/AppGroup/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/File Provider Storage/Repositories/playjs_twigl/node_modules/opn/xdg-open:1
 #!/bin/sh
 ^
 
