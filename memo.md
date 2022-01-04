@@ -8,8 +8,10 @@
 ```
 [ERR] `.bitly` not found.
 
+Launching app... http://localhost:3001
+
 [OK] development build
-ℹ ｢wds｣: Project is running at http://localhost:9090/
+ℹ ｢wds｣: Project is running at http://localhost:3001/
 ℹ ｢wds｣: webpack output is served from /js/
 ℹ ｢wds｣: Content not from webpack is served from /private/var/mobile/Containers/Shared/AppGroup/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/File Provider Storage/Repositories/playjs_twigl/public
 /private/var/mobile/Containers/Shared/AppGroup/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/File Provider Storage/Repositories/playjs_twigl/node_modules/opn/xdg-open:1
@@ -26,19 +28,19 @@ SyntaxError: Invalid or unexpected token
     at MessagePort.<anonymous> (internal/main/worker_thread.js:167:24)
     at MessagePort.emit (events.js:321:20)
     at MessagePort.onmessage (internal/worker/io.js:78:8)
-ℹ ｢wdm｣: Hash: c657791256e534e164da
+ℹ ｢wdm｣: Hash: e954e0771f2eb092bb91
 Version: webpack 4.46.0
-Time: 3232ms
-Built at: 01/04/2022 12:14:31 AM
+Time: 3453ms
+Built at: 01/04/2022 4:47:02 PM
     Asset      Size  Chunks             Chunk Names
 script.js  3.72 MiB  script  [emitted]  script
 Entrypoint script = script.js
-[0] multi ../node_modules/webpack-dev-server/client?http://localhost:9090 ./script.js 40 bytes {script} [built]
+[0] multi ../node_modules/webpack-dev-server/client?http://localhost:3001 ./script.js 40 bytes {script} [built]
 [../node_modules/firebase/analytics/dist/index.esm.js] 68 bytes {script} [built]
 [../node_modules/firebase/app/dist/index.cjs.js] 1.04 KiB {script} [built]
 [../node_modules/firebase/database/dist/index.esm.js] 67 bytes {script} [built]
 [../node_modules/promise-polyfill/src/index.js] 5.99 KiB {script} [built]
-[../node_modules/webpack-dev-server/client/index.js?http://localhost:9090] ../node_modules/webpack-dev-server/client?http://localhost:9090 4.29 KiB {script} [built]
+[../node_modules/webpack-dev-server/client/index.js?http://localhost:3001] ../node_modules/webpack-dev-server/client?http://localhost:3001 4.29 KiB {script} [built]
 [../node_modules/webpack-dev-server/client/overlay.js] 3.52 KiB {script} [built]
 [../node_modules/webpack-dev-server/client/socket.js] 1.53 KiB {script} [built]
 [../node_modules/webpack-dev-server/client/utils/createSocketUrl.js] 2.91 KiB {script} [built]
@@ -50,7 +52,6 @@ Entrypoint script = script.js
 [./script.js] 91.6 KiB {script} [built]
     + 44 hidden modules
 ℹ ｢wdm｣: Compiled successfully.
-
 ```
 
 
@@ -59,11 +60,13 @@ Entrypoint script = script.js
 ```
 [ERR] `.bitly` not found.
 
+Launching app... http://localhost:3001
+
 [OK] production build
 Hash: b010b6a42bb8643c7918
 Version: webpack 4.46.0
-Time: 6481ms
-Built at: 01/04/2022 12:12:51 AM
+Time: 2873ms
+Built at: 01/04/2022 4:45:49 PM
     Asset     Size  Chunks                    Chunk Names
 script.js  370 KiB       0  [emitted]  [big]  script
 Entrypoint script [big] = script.js
@@ -91,7 +94,6 @@ Entrypoints:
 WARNING in webpack performance recommendations: 
 You can limit the size of your bundles by using import() or require.ensure to lazy load some parts of your application.
 For more info visit https://webpack.js.org/guides/code-splitting/
-
 ```
 
 
@@ -101,11 +103,13 @@ For more info visit https://webpack.js.org/guides/code-splitting/
 ```
 [ERR] `.bitly` not found.
 
+Launching app... http://localhost:3001
+
 [OK] development build
 Hash: da2ab25102d00834ea8c
 Version: webpack 4.46.0
-Time: 3096ms
-Built at: 01/04/2022 12:13:46 AM
+Time: 3171ms
+Built at: 01/04/2022 4:46:29 PM
     Asset      Size  Chunks             Chunk Names
 script.js  2.85 MiB  script  [emitted]  script
 Entrypoint script = script.js
