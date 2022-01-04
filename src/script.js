@@ -11,7 +11,7 @@ import 'firebase/database';
 import 'firebase/analytics';
 
 (() => {
-
+console.log('main');
 let canvas     = null; // スクリーン
 let editor     = null; // Ace editor のインスタンス
 let lineout    = null; // ステータスバー DOM
@@ -87,87 +87,87 @@ let editorFontSize = 17;          // エディタのフォントサイズ
 
 // fragmen.js 用のオプションの雛形
 const FRAGMEN_OPTION = {
-    target: null,
-    eventTarget: null,
-    mouse: true,
-    resize: true,
-    escape: false
+  target: null,
+  eventTarget: null,
+  mouse: true,
+  resize: true,
+  escape: false
 }
 // 外部サービスへリクエストする際のベース URL
 const BASE_URL = location.origin;
 // firebase のコンフィグ
 const FIREBASE_CONFIG = {
-    apiKey: 'AIzaSyAcRObIHeZUmCt_X3FEzLdBJzUDYTVRte8',
-    authDomain: 'twigl-f67a0.firebaseapp.com',
-    databaseURL: 'https://twigl-f67a0.firebaseio.com',
-    projectId: 'twigl-f67a0',
-    storageBucket: 'twigl-f67a0.appspot.com',
-    messagingSenderId: '653821260349',
-    appId: '1:653821260349:web:17e2128ca9a60f2c7ff054',
-    measurementId: 'G-WHMVELFNCW'
+  apiKey: 'AIzaSyAcRObIHeZUmCt_X3FEzLdBJzUDYTVRte8',
+  authDomain: 'twigl-f67a0.firebaseapp.com',
+  databaseURL: 'https://twigl-f67a0.firebaseio.com',
+  projectId: 'twigl-f67a0',
+  storageBucket: 'twigl-f67a0.appspot.com',
+  messagingSenderId: '653821260349',
+  appId: '1:653821260349:web:17e2128ca9a60f2c7ff054',
+  measurementId: 'G-WHMVELFNCW'
 };
 // 配信のアサイン設定
 const BROADCAST_ASSIGN = {
-    BOTH:            'both',
-    ONLY_GRAPHICS:   'onlygraphics',
-    INVITE_SOUND:    'invitesound',
-    ONLY_SOUND:      'onlysound',
-    INVITE_GRAPHICS: 'invitegraphics',
+  BOTH:            'both',
+  ONLY_GRAPHICS:   'onlygraphics',
+  INVITE_SOUND:    'invitesound',
+  ONLY_SOUND:      'onlysound',
+  INVITE_GRAPHICS: 'invitegraphics',
 };
 // 何に対するディレクターなのか
 const BROADCAST_DIRECTION = {
-    BOTH:     'both',
-    GRAPHICS: 'graphics',
-    SOUND:    'sound',
+  BOTH:     'both',
+  GRAPHICS: 'graphics',
+  SOUND:    'sound',
 };
 
 window.addEventListener('DOMContentLoaded', () => {
-    // firebase の初期化
-    firebase.initializeApp(FIREBASE_CONFIG);
-    firebase.analytics();
-    fire = new FireDB(firebase);
+  // firebase の初期化
+  firebase.initializeApp(FIREBASE_CONFIG);
+  firebase.analytics();
+  fire = new FireDB(firebase);
 
-    // DOM への参照
-    canvas     = document.querySelector('#webgl');
-    lineout    = document.querySelector('#lineout');
-    counter    = document.querySelector('#counter');
-    message    = document.querySelector('#message');
-    mode       = document.querySelector('#modeselect');
-    animate    = document.querySelector('#pausetoggle');
-    frames     = document.querySelector('#frameselect');
-    size       = document.querySelector('#sizeselect');
-    download   = document.querySelector('#downloadgif');
-    link       = document.querySelector('#permanentlink');
-    layer      = document.querySelector('#layer');
-    dialog     = document.querySelector('#dialogmessage');
-    canvasWrap = document.querySelector('#canvaswrap');
-    editorWrap = document.querySelector('#editorwrap');
-    iconColumn = document.querySelector('#globaliconcolumn');
-    infoIcon   = document.querySelector('#informationicon');
-    fullIcon   = document.querySelector('#fullscreenicon');
-    broadIcon  = document.querySelector('#broadcasticon');
-    starIcon   = document.querySelector('#stariconwrap');
-    menuIcon   = document.querySelector('#togglemenuicon');
-    noteIcon   = document.querySelector('#noteicon');
-    hideIcon   = document.querySelector('#hidemenuicon');
-    syncToggle = document.querySelector('#syncscrolltoggle');
+  // DOM への参照
+  canvas     = document.querySelector('#webgl');
+  lineout    = document.querySelector('#lineout');
+  counter    = document.querySelector('#counter');
+  message    = document.querySelector('#message');
+  mode       = document.querySelector('#modeselect');
+  animate    = document.querySelector('#pausetoggle');
+  frames     = document.querySelector('#frameselect');
+  size       = document.querySelector('#sizeselect');
+  download   = document.querySelector('#downloadgif');
+  link       = document.querySelector('#permanentlink');
+  layer      = document.querySelector('#layer');
+  dialog     = document.querySelector('#dialogmessage');
+  canvasWrap = document.querySelector('#canvaswrap');
+  editorWrap = document.querySelector('#editorwrap');
+  iconColumn = document.querySelector('#globaliconcolumn');
+  infoIcon   = document.querySelector('#informationicon');
+  fullIcon   = document.querySelector('#fullscreenicon');
+  broadIcon  = document.querySelector('#broadcasticon');
+  starIcon   = document.querySelector('#stariconwrap');
+  menuIcon   = document.querySelector('#togglemenuicon');
+  noteIcon   = document.querySelector('#noteicon');
+  hideIcon   = document.querySelector('#hidemenuicon');
+  syncToggle = document.querySelector('#syncscrolltoggle');
 
-    audioWrap     = document.querySelector('#audio');
-    audioLineout  = document.querySelector('#lineoutaudio');
-    audioCounter  = document.querySelector('#counteraudio');
-    audioMessage  = document.querySelector('#messageaudio');
-    audioToggle   = document.querySelector('#audiotoggle');
-    audioPlayIcon = document.querySelector('#playicon');
-    audioStopIcon = document.querySelector('#stopicon');
+  audioWrap     = document.querySelector('#audio');
+  audioLineout  = document.querySelector('#lineoutaudio');
+  audioCounter  = document.querySelector('#counteraudio');
+  audioMessage  = document.querySelector('#messageaudio');
+  audioToggle   = document.querySelector('#audiotoggle');
+  audioPlayIcon = document.querySelector('#playicon');
+  audioStopIcon = document.querySelector('#stopicon');
 
-    // fragmen からデフォルトのソース一覧を取得
-    const fragmenDefaultSource = Fragmen.DEFAULT_SOURCE;
+  // fragmen からデフォルトのソース一覧を取得
+  const fragmenDefaultSource = Fragmen.DEFAULT_SOURCE;
 
-    // メニュー及びエディタを非表示にするかどうかのフラグ
-    let isLayerHidden = false;
+  // メニュー及びエディタを非表示にするかどうかのフラグ
+  let isLayerHidden = false;
 
-    // URL の GET パラメータの解析
-    urlParameter = getParameter();
+  // URL の GET パラメータの解析
+  urlParameter = getParameter();
     urlParameter.forEach((value, key) => {
         switch(key){
             case 'mode':

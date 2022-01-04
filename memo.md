@@ -1,3 +1,14 @@
+# webpack
+
+Pythonista で実行するときは、`build` が必要
+
+
+
+# font size
+
+どこでやるのか？
+
+
 # play.js の挙動
 
 `index.js` を特別記述しなくても、`package.json`の`script:` で、node への指示ができてる
