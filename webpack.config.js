@@ -2,6 +2,11 @@ const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 
+
+// play.js or other(PC browser)
+const port = process.env['WEB_APP_PORT'] || 9090;
+
+
 // bitly api access token
 let BITLY_ACCESS_TOKEN = '';
 try {
@@ -10,6 +15,7 @@ try {
   console.log('[ERR] `.bitly` not found.');
 }
 console.log(BITLY_ACCESS_TOKEN);
+
 
 module.exports = (env, argv) => {
   let devmode;
@@ -55,7 +61,7 @@ module.exports = (env, argv) => {
       contentBase: path.join(__dirname, 'public'),
       openPage: './index.html',
       open: true,
-      port: 9090,
+      port: port,
       publicPath: '/js/',
       watchContentBase: true,
     },
