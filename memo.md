@@ -1,5 +1,8 @@
 # mac log
 
+
+## `npm start`
+
 ```
 % >npm start
 
@@ -46,6 +49,97 @@ Entrypoint script = script.js
 
 
 
+## `npm run build`
+
+vscode で、`package.json` 上のデバッグ選択から実行
+
+
+```
+% >npm run build
+Debugger attached.
+
+> @0.0.1 build /pome-ta/playjs_twigl
+> webpack --mode production
+
+Debugger attached.
+[ERR] `.bitly` not found.
+
+Launching app... http://localhost:9090
+
+[OK] production build
+Hash: fabf51bfd5d10a155f0b
+Version: webpack 4.46.0
+Time: 1786ms
+Built at: 2022/01/05 12:30:49
+    Asset     Size  Chunks                    Chunk Names
+script.js  370 KiB       0  [emitted]  [big]  script
+Entrypoint script [big] = script.js
+[16] ./script.js + 10 modules 301 KiB {0} [built]
+     | ./script.js 91.6 KiB [built]
+     | ./fragmen.js 39.3 KiB [built]
+     | ./onomat.js 17.4 KiB [built]
+     | ./music.js 7.82 KiB [built]
+     | ./firedb.js 12.4 KiB [built]
+     | ./shader_snippet/noise.glsl 8.65 KiB [built]
+     |     + 5 hidden modules
+    + 16 hidden modules
+
+WARNING in asset size limit: The following asset(s) exceed the recommended size limit (244 KiB).
+This can impact web performance.
+Assets: 
+  script.js (370 KiB)
+
+WARNING in entrypoint size limit: The following entrypoint(s) combined asset size exceeds the recommended limit (244 KiB). This can impact web performance.
+Entrypoints:
+  script (370 KiB)
+      script.js
+
+
+WARNING in webpack performance recommendations: 
+You can limit the size of your bundles by using import() or require.ensure to lazy load some parts of your application.
+For more info visit https://webpack.js.org/guides/code-splitting/
+Waiting for the debugger to disconnect...
+Waiting for the debugger to disconnect...
+
+```
+
+
+
+## `npm run debug`
+
+
+
+```
+% >npm run debug
+Debugger attached.
+
+> @0.0.1 debug /pome-ta/playjs_twigl
+> webpack --mode development
+
+Debugger attached.
+[ERR] `.bitly` not found.
+
+Launching app... http://localhost:9090
+
+[OK] development build
+Hash: d1db45dcdf5d8b60afb3
+Version: webpack 4.46.0
+Time: 1992ms
+Built at: 2022/01/05 12:33:29
+    Asset      Size  Chunks             Chunk Names
+script.js  2.84 MiB  script  [emitted]  script
+Entrypoint script = script.js
+[./firedb.js] 12.4 KiB {script} [built]
+[./fragmen.js] 39.3 KiB {script} [built]
+[./music.js] 7.82 KiB {script} [built]
+[./onomat.js] 17.4 KiB {script} [built]
+[./script.js] 91.6 KiB {script} [built]
+[./shader_snippet/noise.glsl] 8.65 KiB {script} [built]
+    + 21 hidden modules
+Waiting for the debugger to disconnect...
+Waiting for the debugger to disconnect...
+
+```
 
 
 
