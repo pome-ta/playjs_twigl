@@ -83,7 +83,7 @@ import 'firebase/analytics';
   let channelData = null;           // チャンネルのデータを保持
   let starData = null;              // スターに関するデータを保持
   let viewerData = null;            // 視聴者数に関するデータを保持
-  let editorFontSize = 10;          // エディタのフォントサイズ
+  let editorFontSize = 17;          // エディタのフォントサイズ
 
   // fragmen.js 用のオプションの雛形
   const FRAGMEN_OPTION = {
