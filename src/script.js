@@ -10,6 +10,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/database';
 import 'firebase/analytics';
 
+
 (() => {
   console.log('main');
   let canvas = null; // スクリーン
@@ -215,8 +216,10 @@ import 'firebase/analytics';
     // URL パラメータより得たカレントモードが存在するか
     if (fragmenDefaultSource[currentMode] != null) {
       mode.selectedIndex = currentMode;
+      console.log('t');
     } else {
       currentMode = Fragmen.MODE_CLASSIC;
+      console.log('f');
     }
     // この時点でカレントソースが空である場合既定のソースを利用する
     if (currentSource === '') {
@@ -226,6 +229,7 @@ import 'firebase/analytics';
     if (audioToggle.checked !== true || currentAudioSource === '') {
       currentAudioSource = Onomat.FRAGMENT_SHADER_SOURCE_DEFAULT;
     }
+    console.log(currentAudioSource);
 
     // channel ID がある場合は配信に関係している状態とみなす
     let invalidURL = false;

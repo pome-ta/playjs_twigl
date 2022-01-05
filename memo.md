@@ -1,3 +1,9 @@
+# branch
+
+
+素の状況を`default` として逃してる
+
+
 # mac log
 
 
