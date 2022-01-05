@@ -1,10 +1,10 @@
 
 import 'whatwg-fetch';
 import Promise from 'promise-polyfill';
-import {Fragmen} from './fragmen.js';
-import {Onomat} from './onomat.js';
-import {Musician} from './music.js';
-import {FireDB} from './firedb.js';
+import { Fragmen } from './fragmen.js';
+import { Onomat } from './onomat.js';
+import { Musician } from './music.js';
+import { FireDB } from './firedb.js';
 
 import * as firebase from 'firebase/app';
 import 'firebase/database';
@@ -12,53 +12,53 @@ import 'firebase/analytics';
 
 (() => {
   console.log('main');
-  let canvas     = null; // スクリーン
-  let editor     = null; // Ace editor のインスタンス
-  let lineout    = null; // ステータスバー DOM
-  let counter    = null; // 文字数カウンター DOM
-  let message    = null; // メッセージ DOM
-  let mode       = null; // variable mode select
-  let animate    = null; // アニメーション用 toggle
-  let frames     = null; // render frame select
-  let size       = null; // resolution select
-  let download   = null; // download button
-  let link       = null; // generate link button
-  let layer      = null; // dialog layer
-  let dialog     = null; // dialog message wrapper
+  let canvas = null; // スクリーン
+  let editor = null; // Ace editor のインスタンス
+  let lineout = null; // ステータスバー DOM
+  let counter = null; // 文字数カウンター DOM
+  let message = null; // メッセージ DOM
+  let mode = null; // variable mode select
+  let animate = null; // アニメーション用 toggle
+  let frames = null; // render frame select
+  let size = null; // resolution select
+  let download = null; // download button
+  let link = null; // generate link button
+  let layer = null; // dialog layer
+  let dialog = null; // dialog message wrapper
   let canvasWrap = null; // canvas を包んでいるラッパー DOM
   let editorWrap = null; // editor を包んでいるラッパー DOM
   let iconColumn = null; // icon を包んでいるラッパー DOM
-  let infoIcon   = null; // information icon
-  let fullIcon   = null; // fullscreen icon
-  let broadIcon  = null; // broadcast mode icon
-  let starIcon   = null; // star icon
-  let menuIcon   = null; // menu icon
-  let noteIcon   = null; // note icon
-  let hideIcon   = null; // hide menu icon
+  let infoIcon = null; // information icon
+  let fullIcon = null; // fullscreen icon
+  let broadIcon = null; // broadcast mode icon
+  let starIcon = null; // star icon
+  let menuIcon = null; // menu icon
+  let noteIcon = null; // note icon
+  let hideIcon = null; // hide menu icon
   let syncToggle = null; // スクロール同期用のチェックボックス
 
-  let audioWrap     = null; // サウンドシェーダペインのラッパー
-  let audioEditor   = null; // Ace editor のインスタンス
-  let audioLineout  = null; // ステータスバー DOM
-  let audioCounter  = null; // 文字数カウンター DOM
-  let audioMessage  = null; // メッセージ DOM
-  let audioToggle   = null; // トグルボタン
+  let audioWrap = null; // サウンドシェーダペインのラッパー
+  let audioEditor = null; // Ace editor のインスタンス
+  let audioLineout = null; // ステータスバー DOM
+  let audioCounter = null; // 文字数カウンター DOM
+  let audioMessage = null; // メッセージ DOM
+  let audioToggle = null; // トグルボタン
   let audioPlayIcon = null; // 再生ボタン
   let audioStopIcon = null; // 停止ボタン
 
-  let latestStatus       = 'success';            // 直近のステータス
-  let latestAudioStatus  = 'success';            // 直近のステータス（サウンドシェーダ）
-  let isEncoding         = false;                // エンコード中かどうか
-  let currentMode        = Fragmen.MODE_CLASSIC; // 現在の Fragmen モード
-  let currentSource      = '';                   // 直近のソースコード
+  let latestStatus = 'success';            // 直近のステータス
+  let latestAudioStatus = 'success';            // 直近のステータス（サウンドシェーダ）
+  let isEncoding = false;                // エンコード中かどうか
+  let currentMode = Fragmen.MODE_CLASSIC; // 現在の Fragmen モード
+  let currentSource = '';                   // 直近のソースコード
   let currentAudioSource = '';                   // 直近の Sound Shader のソースコード
-  let fragmen            = null;                 // fragmen.js のインスタンス
-  let onomat             = null;                 // onomat.js のインスタンス
-  let musician           = null;                 // music.js のインスタンス
+  let fragmen = null;                 // fragmen.js のインスタンス
+  let onomat = null;                 // onomat.js のインスタンス
+  let musician = null;                 // music.js のインスタンス
 
   let urlParameter = null;  // GET パラメータを解析するための searchParams オブジェクト
-  let vimMode      = false; // vim mode
-  let syncScroll   = true;  // エディタ上で配信を受けている場合にスクロール同期するか
+  let vimMode = false; // vim mode
+  let syncScroll = true;  // エディタ上で配信を受けている場合にスクロール同期するか
 
   let fire = null;                  // firedb
   let currentDirectorId = null;     // 自分自身のディレクター ID
@@ -83,7 +83,7 @@ import 'firebase/analytics';
   let channelData = null;           // チャンネルのデータを保持
   let starData = null;              // スターに関するデータを保持
   let viewerData = null;            // 視聴者数に関するデータを保持
-  let editorFontSize = 17;          // エディタのフォントサイズ
+  let editorFontSize = 10;          // エディタのフォントサイズ
 
   // fragmen.js 用のオプションの雛形
   const FRAGMEN_OPTION = {
@@ -108,17 +108,17 @@ import 'firebase/analytics';
   };
   // 配信のアサイン設定
   const BROADCAST_ASSIGN = {
-    BOTH:            'both',
-    ONLY_GRAPHICS:   'onlygraphics',
-    INVITE_SOUND:    'invitesound',
-    ONLY_SOUND:      'onlysound',
+    BOTH: 'both',
+    ONLY_GRAPHICS: 'onlygraphics',
+    INVITE_SOUND: 'invitesound',
+    ONLY_SOUND: 'onlysound',
     INVITE_GRAPHICS: 'invitegraphics',
   };
   // 何に対するディレクターなのか
   const BROADCAST_DIRECTION = {
-    BOTH:     'both',
+    BOTH: 'both',
     GRAPHICS: 'graphics',
-    SOUND:    'sound',
+    SOUND: 'sound',
   };
 
   window.addEventListener('DOMContentLoaded', () => {
@@ -128,35 +128,35 @@ import 'firebase/analytics';
     fire = new FireDB(firebase);
 
     // DOM への参照
-    canvas     = document.querySelector('#webgl');
-    lineout    = document.querySelector('#lineout');
-    counter    = document.querySelector('#counter');
-    message    = document.querySelector('#message');
-    mode       = document.querySelector('#modeselect');
-    animate    = document.querySelector('#pausetoggle');
-    frames     = document.querySelector('#frameselect');
-    size       = document.querySelector('#sizeselect');
-    download   = document.querySelector('#downloadgif');
-    link       = document.querySelector('#permanentlink');
-    layer      = document.querySelector('#layer');
-    dialog     = document.querySelector('#dialogmessage');
+    canvas = document.querySelector('#webgl');
+    lineout = document.querySelector('#lineout');
+    counter = document.querySelector('#counter');
+    message = document.querySelector('#message');
+    mode = document.querySelector('#modeselect');
+    animate = document.querySelector('#pausetoggle');
+    frames = document.querySelector('#frameselect');
+    size = document.querySelector('#sizeselect');
+    download = document.querySelector('#downloadgif');
+    link = document.querySelector('#permanentlink');
+    layer = document.querySelector('#layer');
+    dialog = document.querySelector('#dialogmessage');
     canvasWrap = document.querySelector('#canvaswrap');
     editorWrap = document.querySelector('#editorwrap');
     iconColumn = document.querySelector('#globaliconcolumn');
-    infoIcon   = document.querySelector('#informationicon');
-    fullIcon   = document.querySelector('#fullscreenicon');
-    broadIcon  = document.querySelector('#broadcasticon');
-    starIcon   = document.querySelector('#stariconwrap');
-    menuIcon   = document.querySelector('#togglemenuicon');
-    noteIcon   = document.querySelector('#noteicon');
-    hideIcon   = document.querySelector('#hidemenuicon');
+    infoIcon = document.querySelector('#informationicon');
+    fullIcon = document.querySelector('#fullscreenicon');
+    broadIcon = document.querySelector('#broadcasticon');
+    starIcon = document.querySelector('#stariconwrap');
+    menuIcon = document.querySelector('#togglemenuicon');
+    noteIcon = document.querySelector('#noteicon');
+    hideIcon = document.querySelector('#hidemenuicon');
     syncToggle = document.querySelector('#syncscrolltoggle');
 
-    audioWrap     = document.querySelector('#audio');
-    audioLineout  = document.querySelector('#lineoutaudio');
-    audioCounter  = document.querySelector('#counteraudio');
-    audioMessage  = document.querySelector('#messageaudio');
-    audioToggle   = document.querySelector('#audiotoggle');
+    audioWrap = document.querySelector('#audio');
+    audioLineout = document.querySelector('#lineoutaudio');
+    audioCounter = document.querySelector('#counteraudio');
+    audioMessage = document.querySelector('#messageaudio');
+    audioToggle = document.querySelector('#audiotoggle');
     audioPlayIcon = document.querySelector('#playicon');
     audioStopIcon = document.querySelector('#stopicon');
 
@@ -169,7 +169,7 @@ import 'firebase/analytics';
     // URL の GET パラメータの解析
     urlParameter = getParameter();
     urlParameter.forEach((value, key) => {
-      switch(key){
+      switch (key) {
         case 'mode':
           currentMode = parseInt(value);
           break;
@@ -196,7 +196,7 @@ import 'firebase/analytics';
           let directionFlag = Object.entries(BROADCAST_DIRECTION).some(([key, val]) => {
             return val === value;
           });
-          if(directionFlag !== true){
+          if (directionFlag !== true) {
             directionMode = null;
           }
           break;
@@ -213,39 +213,39 @@ import 'firebase/analytics';
       }
     });
     // URL パラメータより得たカレントモードが存在するか
-    if(fragmenDefaultSource[currentMode] != null){
+    if (fragmenDefaultSource[currentMode] != null) {
       mode.selectedIndex = currentMode;
-    }else{
+    } else {
       currentMode = Fragmen.MODE_CLASSIC;
     }
     // この時点でカレントソースが空である場合既定のソースを利用する
-    if(currentSource === ''){
+    if (currentSource === '') {
       currentSource = fragmenDefaultSource[currentMode];
     }
     // audioToggle が checked ではないかサウンドシェーダのソースが空の場合既定のソースを利用する
-    if(audioToggle.checked !== true || currentAudioSource === ''){
+    if (audioToggle.checked !== true || currentAudioSource === '') {
       currentAudioSource = Onomat.FRAGMENT_SHADER_SOURCE_DEFAULT;
     }
 
     // channel ID がある場合は配信に関係している状態とみなす
     let invalidURL = false;
-    if(currentChannelId != null && directionMode != null){
-      if(currentDirectorId != null){
+    if (currentChannelId != null && directionMode != null) {
+      if (currentDirectorId != null) {
         // ディレクター ID が存在する場合視聴者ではなくいずれかの配信者
-        if(isOwner === true){
+        if (isOwner === true) {
           // この時点でオーナーだということは復帰 URL を踏んでいる
           // つまり先に firebase から復帰すべき情報を取得してやらなくてならない
           // isDirectorInitialized は通常は true だが、初期化が完了するまでは false に設定する
           isDirectorInitialized = false;
-          broadcastSetting = {validation: true, assign: 'both'};
+          broadcastSetting = { validation: true, assign: 'both' };
           // フレンドがいるかどうか
-          if(friendDirectorId != null){
+          if (friendDirectorId != null) {
             // フレンドがいる場合、招待したほうのエディタは編集不可能にする
-            if(directionMode === BROADCAST_DIRECTION.GRAPHICS){
+            if (directionMode === BROADCAST_DIRECTION.GRAPHICS) {
               // フレンドはサウンドを担当
               soundDisable = true;
               broadcastSetting.assign = BROADCAST_ASSIGN.INVITE_SOUND;
-            }else{
+            } else {
               // フレンドはグラフィックスを担当
               graphicsDisable = true;
               disableRegulation();
@@ -261,7 +261,7 @@ import 'firebase/analytics';
             currentChannelId,
             friendDirectorId,
           );
-          if(friendDirectorId != null){
+          if (friendDirectorId != null) {
             friendURL = BASE_URL + '?' + generateFriendURL(
               currentMode,
               directionMode,
@@ -274,29 +274,29 @@ import 'firebase/analytics';
           shareURL = `${BASE_URL}?ch=${currentChannelId}&dm=${directionMode}`;
           // 配信モードはオーナー
           broadcastMode = 'owner';
-        }else{
+        } else {
           // 招待を受けた側
-          if(friendDirectorId != null){
+          if (friendDirectorId != null) {
             // フレンドの場合もオーナーの場合と同じでコードを復元する必要がある
             isDirectorInitialized = false;
             // この箇所での friend == オーナーディレクターなのでオーナー側のエディタは編集不可能にする
-            if(directionMode === BROADCAST_DIRECTION.GRAPHICS){
+            if (directionMode === BROADCAST_DIRECTION.GRAPHICS) {
               // オーナーはグラフィックスを担当
               graphicsDisable = true;
               // フレンド側からはレギュレーションは操作できない
               disableRegulation();
-            }else{
+            } else {
               // オーナーはサウンドを担当
               soundDisable = true;
             }
             // 配信モードはフレンド
             broadcastMode = 'friend';
-          }else{
+          } else {
             // オーナーがいないことになってしまうので不正
             invalidURL = true;
           }
         }
-      }else{
+      } else {
         // 視聴者の場合エディタは強制的に読み取り専用になる
         graphicsDisable = true;
         soundDisable = true;
@@ -304,7 +304,7 @@ import 'firebase/analytics';
         broadcastMode = 'audience';
       }
     }
-    if(invalidURL === true){
+    if (invalidURL === true) {
       // 無効な URL とみなされるなにかがあったので通常の初期化フローにする
       currentDirectorId = null;
       friendDirectorId = null;
@@ -326,7 +326,7 @@ import 'firebase/analytics';
     let timeoutId = null;
     editor = editorSetting('editor', currentSource, (evt) => {
       // １秒以内の場合はタイマーをキャンセル
-      if(timeoutId != null){clearTimeout(timeoutId);}
+      if (timeoutId != null) { clearTimeout(timeoutId); }
       timeoutId = setTimeout(() => {
         timeoutId = null;
         update(editor.getValue());
@@ -335,12 +335,12 @@ import 'firebase/analytics';
       counter.textContent = `${editor.getValue().length}`;
     }, (evt) => {
       // 配信中はステータスとは無関係に状態を送る
-      if(currentChannelId != null && (broadcastMode === 'owner' || broadcastMode === 'friend')){
+      if (currentChannelId != null && (broadcastMode === 'owner' || broadcastMode === 'friend')) {
         // グラフィックスを編集する立場かどうか
-        if(
+        if (
           (broadcastMode === 'owner' && directionMode !== BROADCAST_DIRECTION.SOUND) ||
           (broadcastMode === 'friend' && directionMode === BROADCAST_DIRECTION.SOUND)
-        ){
+        ) {
           updateGraphicsData(currentDirectorId, currentChannelId, currentMode);
         }
       }
@@ -348,7 +348,7 @@ import 'firebase/analytics';
     let audioTimeoutId = null;
     audioEditor = editorSetting('editoraudio', currentAudioSource, (evt) => {
       // １秒以内の場合はタイマーをキャンセル
-      if(audioTimeoutId != null){clearTimeout(audioTimeoutId);}
+      if (audioTimeoutId != null) { clearTimeout(audioTimeoutId); }
       audioTimeoutId = setTimeout(() => {
         audioTimeoutId = null;
         updateAudio(audioEditor.getValue());
@@ -357,18 +357,18 @@ import 'firebase/analytics';
       audioCounter.textContent = `${audioEditor.getValue().length}`;
     }, (evt) => {
       // 配信中はステータスとは無関係に状態を送る
-      if(currentChannelId != null && (broadcastMode === 'owner' || broadcastMode === 'friend')){
+      if (currentChannelId != null && (broadcastMode === 'owner' || broadcastMode === 'friend')) {
         // グラフィックスを編集する立場かどうか
-        if(
+        if (
           (broadcastMode === 'owner' && directionMode !== BROADCAST_DIRECTION.GRAPHICS) ||
           (broadcastMode === 'friend' && directionMode === BROADCAST_DIRECTION.GRAPHICS)
-        ){
+        ) {
           updateSoundData(currentDirectorId, currentChannelId, soundPlay);
         }
       }
     });
     // audioToggle が checked である場合、URL からサウンドシェーダが有効化されている
-    if(audioToggle.checked === true){
+    if (audioToggle.checked === true) {
       // まず自家製ダイアログを出しユーザーにクリック操作をさせる
       showDialog('This URL is a valid of sound shader.\nIt is OK play the audio?', {
         okLabel: 'yes',
@@ -378,7 +378,7 @@ import 'firebase/analytics';
           // ユーザーが OK, Cancel のいずれをクリックしたかのフラグを引数に与える
           onomatSetting(result);
           // OK がクリックされた場合は文字数等を更新する
-          if(result === true){
+          if (result === true) {
             update(editor.getValue());
             counter.textContent = `${editor.getValue().length}`;
             audioCounter.textContent = `${audioEditor.getValue().length}`;
@@ -402,11 +402,11 @@ import 'firebase/analytics';
       fragmen.mode = currentMode;
 
       // 既定のソースと同じならモードに応じた既定のソースに書き換える
-      if(source === defaultSourceInPrevMode){
+      if (source === defaultSourceInPrevMode) {
         const defaultSource = fragmenDefaultSource[currentMode];
         editor.setValue(defaultSource);
-        setTimeout(() => {editor.gotoLine(1);}, 100);
-      }else{
+        setTimeout(() => { editor.gotoLine(1); }, 100);
+      } else {
         // ソースを置き換えないとしてもビルドはしなおす
         update(editor.getValue());
       }
@@ -414,16 +414,16 @@ import 'firebase/analytics';
 
     // アニメーション有効・無効設定用トグル
     animate.addEventListener('change', () => {
-      if(animate.checked === true){
+      if (animate.checked === true) {
         // オンにされた場合はコンパイルを行う
-        if(fragmen != null){
+        if (fragmen != null) {
           fragmen.setAnimation(true);
           update(editor.getValue());
           fragmen.draw();
         }
-      }else{
+      } else {
         // オフにされた場合はアニメーションさせない設定に切り替える
-        if(fragmen != null){
+        if (fragmen != null) {
           fragmen.setAnimation(false);
         }
       }
@@ -433,10 +433,10 @@ import 'firebase/analytics';
     // ダウンロードボタン
     download.addEventListener('click', () => {
       // ボタンに disabled が付与されているかエンコード中は即時終了
-      if(
+      if (
         download.classList.contains('disabled') === true ||
         isEncoding === true
-      ){
+      ) {
         return;
       }
 
@@ -540,17 +540,17 @@ import 'firebase/analytics';
       qualityWrap.appendChild(qualityInput);
       wrap.appendChild(qualityWrap);
 
-      showDialog(wrap, {okLabel: 'start'})
+      showDialog(wrap, { okLabel: 'start' })
         .then((isOk) => {
-          if(isOk !== true){return;}
-          if(
+          if (isOk !== true) { return; }
+          if (
             isNaN(parseInt(frameInput.value)) === true ||
             isNaN(parseInt(widthInput.value)) === true ||
             isNaN(parseInt(heightInput.value)) === true ||
             isNaN(parseInt(framerateInput.value)) === true ||
             isNaN(parseInt(qualityInput.value)) === true ||
             false
-          ){
+          ) {
             alert('Should not be blank.');
             return;
           }
@@ -576,14 +576,14 @@ import 'firebase/analytics';
 
     // リンク生成ボタン
     link.addEventListener('click', () => {
-      if(link.classList.contains('disabled') === true){return;}
+      if (link.classList.contains('disabled') === true) { return; }
       link.classList.add('disabled');
       generatePermamentLink()
         .then((response) => {
-          if(response.json != null && response.json.link != null){
+          if (response.json != null && response.json.link != null) {
             copyToClipboard(response.json.link);
             alert('Copied link to the clipboard!');
-          }else{
+          } else {
             // embed code too long, or other error.
             copyToClipboard(response.url);
             alert('The request to bitly failed.\nProbably the code you tried to embed into the URL is too long.\n\nHowever, copied the unshortened URL to the clipboard.');
@@ -612,7 +612,7 @@ import 'firebase/analytics';
       lineout.classList.remove('error');
       lineout.classList.add(status);
       message.textContent = msg;
-      switch(status){
+      switch (status) {
         case 'warn':
         case 'error':
           download.classList.add('disabled');
@@ -620,32 +620,32 @@ import 'firebase/analytics';
           break;
         default:
           download.classList.remove('disabled');
-          if(latestStatus === 'success' && latestAudioStatus === 'success'){
+          if (latestStatus === 'success' && latestAudioStatus === 'success') {
             link.classList.remove('disabled');
-          }else{
+          } else {
             link.classList.add('disabled');
           }
       }
       // 配信中はステータスとは無関係に状態を送る
-      if(currentChannelId != null && (broadcastMode === 'owner' || broadcastMode === 'friend')){
+      if (currentChannelId != null && (broadcastMode === 'owner' || broadcastMode === 'friend')) {
         // グラフィックスを編集する立場かどうか
-        if(
+        if (
           (broadcastMode === 'owner' && directionMode !== BROADCAST_DIRECTION.SOUND) ||
           (broadcastMode === 'friend' && directionMode === BROADCAST_DIRECTION.SOUND)
-        ){
+        ) {
           updateGraphicsData(currentDirectorId, currentChannelId, currentMode);
         }
       }
     });
     fragmen.onDraw(() => {
       let freq = 0.0;
-      if(musician != null && musician.isPlay === true){
+      if (musician != null && musician.isPlay === true) {
         freq += musician.getFrequencyFloat();
       }
-      if(onomat != null && audioToggle.checked === true && latestAudioStatus === 'success'){
+      if (onomat != null && audioToggle.checked === true && latestAudioStatus === 'success') {
         freq += onomat.getFrequencyFloat();
       }
-      if(freq > 0.0){
+      if (freq > 0.0) {
         fragmen.setFrequency(freq);
       }
     });
@@ -657,8 +657,8 @@ import 'firebase/analytics';
     fragmen.render(currentSource);
 
     // WebGL 2.0 に対応しているかどうかによりドロップダウンリストの状態を変更
-    if(fragmen.isWebGL2 !== true){
-      for(let i = 0; i < mode.children.length; ++i){
+    if (fragmen.isWebGL2 !== true) {
+      for (let i = 0; i < mode.children.length; ++i) {
         mode.children[i].disabled = Fragmen.MODE_WITH_ES_300.includes(i);
       }
     }
@@ -668,75 +668,75 @@ import 'firebase/analytics';
       onomatSetting();
     }, false);
     audioPlayIcon.addEventListener('click', () => {
-      if(audioToggle.checked !== true || latestAudioStatus !== 'success'){return;}
+      if (audioToggle.checked !== true || latestAudioStatus !== 'success') { return; }
       ++soundPlay;
       updateAudio(audioEditor.getValue(), true);
       // 配信中はステータスとは無関係に状態を送る
-      if(currentChannelId != null && (broadcastMode === 'owner' || broadcastMode === 'friend')){
+      if (currentChannelId != null && (broadcastMode === 'owner' || broadcastMode === 'friend')) {
         // グラフィックスを編集する立場かどうか
-        if(
+        if (
           (broadcastMode === 'owner' && directionMode !== BROADCAST_DIRECTION.GRAPHICS) ||
           (broadcastMode === 'friend' && directionMode === BROADCAST_DIRECTION.GRAPHICS)
-        ){
+        ) {
           updateSoundData(currentDirectorId, currentChannelId, soundPlay);
         }
       }
     }, false);
     audioStopIcon.addEventListener('click', () => {
-      if(musician != null){musician.stop();}
-      if(audioToggle.checked !== true){return;}
+      if (musician != null) { musician.stop(); }
+      if (audioToggle.checked !== true) { return; }
       onomat.stop();
     }, false);
     window.addEventListener('keydown', (evt) => {
       // vim mode
-      if(
+      if (
         ((evt.ctrlKey === true || evt.metaKey === true) && evt.altKey === true) &&
         (evt.key === 'v' || evt.key === 'V' || evt.key === '√')
-      ){
+      ) {
         vimMode = !vimMode;
-        if(vimMode === true){
+        if (vimMode === true) {
           editor.setKeyboardHandler('ace/keyboard/vim');
           audioEditor.setKeyboardHandler('ace/keyboard/vim');
-        }else{
+        } else {
           editor.setKeyboardHandler(null);
           audioEditor.setKeyboardHandler(null);
         }
       }
-      if((evt.ctrlKey === true || evt.metaKey === true) && evt.altKey === true && (evt.key === '†' || evt.key === 't')){
+      if ((evt.ctrlKey === true || evt.metaKey === true) && evt.altKey === true && (evt.key === '†' || evt.key === 't')) {
         toggleEditorView();
       }
-      if((evt.ctrlKey === true || evt.metaKey === true) && evt.altKey === true && (evt.key === '≤' || evt.key === ',')){
+      if ((evt.ctrlKey === true || evt.metaKey === true) && evt.altKey === true && (evt.key === '≤' || evt.key === ',')) {
         --editorFontSize;
         document.querySelector('#editor').style.fontSize = `${editorFontSize}px`;
         document.querySelector('#editoraudio').style.fontSize = `${editorFontSize}px`;
       }
-      if((evt.ctrlKey === true || evt.metaKey === true) && evt.altKey === true && (evt.key === '≥' || evt.key === '.')){
+      if ((evt.ctrlKey === true || evt.metaKey === true) && evt.altKey === true && (evt.key === '≥' || evt.key === '.')) {
         ++editorFontSize;
         document.querySelector('#editor').style.fontSize = `${editorFontSize}px`;
         document.querySelector('#editoraudio').style.fontSize = `${editorFontSize}px`;
       }
-      if(evt.key === 'Enter' && evt.altKey === true){
-        if(evt.ctrlKey === true){
-          if(musician != null){musician.stop();}
+      if (evt.key === 'Enter' && evt.altKey === true) {
+        if (evt.ctrlKey === true) {
+          if (musician != null) { musician.stop(); }
         }
       }
       // onomat
-      if(audioToggle.checked !== true || latestAudioStatus !== 'success'){return;}
+      if (audioToggle.checked !== true || latestAudioStatus !== 'success') { return; }
       // Alt + Enter で再生、Ctrl をさらに付与すると停止
-      if(evt.key === 'Enter' && evt.altKey === true){
-        if(evt.ctrlKey === true){
-          if(musician != null){musician.stop();}
+      if (evt.key === 'Enter' && evt.altKey === true) {
+        if (evt.ctrlKey === true) {
+          if (musician != null) { musician.stop(); }
           onomat.stop();
-        }else{
+        } else {
           ++soundPlay;
           updateAudio(audioEditor.getValue(), true);
           // 配信中はステータスとは無関係に状態を送る
-          if(currentChannelId != null && (broadcastMode === 'owner' || broadcastMode === 'friend')){
+          if (currentChannelId != null && (broadcastMode === 'owner' || broadcastMode === 'friend')) {
             // グラフィックスを編集する立場かどうか
-            if(
+            if (
               (broadcastMode === 'owner' && directionMode !== BROADCAST_DIRECTION.GRAPHICS) ||
               (broadcastMode === 'friend' && directionMode === BROADCAST_DIRECTION.GRAPHICS)
-            ){
+            ) {
               updateSoundData(currentDirectorId, currentChannelId, soundPlay);
             }
           }
@@ -749,28 +749,28 @@ import 'firebase/analytics';
 
     // フルスクリーン解除時に DOM を元に戻すためのリスナー
     const onFullscreenChange = (evt) => {
-      if(
+      if (
         document.FullscreenElement == null &&
         document.webkitFullscreenElement == null &&
         document.msFullscreenElement == null
-      ){
+      ) {
         // すべての要素が null だった場合、DOM 操作を行いエディタを表示させる
         exitFullscreenMode();
       }
     };
     // F11 ではなく、意図的なショートカットキー操作によってフルスクリーンへと移行するためのリスナー
     const onFullscreenKeyDown = (evt) => {
-      if(evt.altKey === true && evt.ctrlKey === true && (evt.key.toLowerCase() === 'f' || evt.key === 'ƒ')){
-        if(
+      if (evt.altKey === true && evt.ctrlKey === true && (evt.key.toLowerCase() === 'f' || evt.key === 'ƒ')) {
+        if (
           document.FullscreenElement != null ||
           document.webkitFullscreenElement != null ||
           document.msFullscreenElement != null
-        ){
+        ) {
           // この場合、絶対に JavaScript から fullscreen 化しているので強制的に戻せばよい
           // ただし、イベントリスナーによって事後処理が自動的に行われることになるので
           // 発火するのは document.exitFullsScreen までで、DOM はここでは操作しない
           exitFullscreen();
-        }else{
+        } else {
           // この場合、F11 で既に見た目上は fullscreen 化している可能性がある
           // F11 の fullscreen は requestFullscreen 等で fullscreen 化したものとは
           // 別物として扱われているが、いずれも Escape で解除できるため注意
@@ -780,24 +780,24 @@ import 'firebase/analytics';
     };
     // アイコンが押されたとき
     const onFullscreenRequest = () => {
-      if(
+      if (
         document.FullscreenElement == null ||
         document.webkitFullscreenElement == null ||
         document.msFullscreenElement == null
-      ){
+      ) {
         requestFullscreenMode();
       }
     };
     // API がサポートされている場合に限りフルスクリーン関連のリスナーを登録する
-    if(document.fullscreenEnabled === true){
+    if (document.fullscreenEnabled === true) {
       document.addEventListener('fullscreenchange', onFullscreenChange, false);
       window.addEventListener('keydown', onFullscreenKeyDown, false);
       fullIcon.addEventListener('click', onFullscreenRequest, false);
-    }else if(document.webkitFullscreenEnabled === true){
+    } else if (document.webkitFullscreenEnabled === true) {
       document.addEventListener('webkitfullscreenchange', onFullscreenChange, false);
       window.addEventListener('keydown', onFullscreenKeyDown, false);
       fullIcon.addEventListener('click', onFullscreenRequest, false);
-    }else{
+    } else {
       // いずれでもない場合は API でフルスクリーン化することができないのでアイコンを消す
       fullIcon.classList.add('nevershow');
     }
@@ -891,7 +891,7 @@ import 'firebase/analytics';
 
     // star
     starIcon.addEventListener('click', () => {
-      if(currentChannelId == null){return;}
+      if (currentChannelId == null) { return; }
       fire.updateStarData(currentChannelId);
     }, false);
 
@@ -912,29 +912,29 @@ import 'firebase/analytics';
 
     // broadcast
     broadIcon.addEventListener('click', () => {
-      if(ownerURL !== ''){
+      if (ownerURL !== '') {
         // 一度でも配信用 URL が生成されている場合は、ただ再表示するだけ
         const wrap = generateShareAnchor(ownerURL, friendURL, shareURL);
-        showDialog(wrap, {cancelVisible: false});
+        showDialog(wrap, { cancelVisible: false });
         return;
       }
       showDialog('Do you want to start setting up a broadcast?')
         .then((isOk) => {
           return new Promise((resolve, reject) => {
-            if(isOk === true){
+            if (isOk === true) {
               // 配信用のフォームを生成
               broadcastForm = generateBroadcastForm();
               const directorName = broadcastForm.querySelector('.directorname');
-              setTimeout(() => {directorName.focus();}, 200);
+              setTimeout(() => { directorName.focus(); }, 200);
               showDialog(broadcastForm)
                 .then((isOk) => {
-                  if(isOk === true){
+                  if (isOk === true) {
                     resolve();
-                  }else{
+                  } else {
                     reject('Broadcast settings were cancelled.');
                   }
                 });
-            }else{
+            } else {
               reject('Broadcast settings were cancelled.');
             }
           });
@@ -948,20 +948,20 @@ import 'firebase/analytics';
             };
             // スクリーンネーム、グループネームが空欄でないかどうか
             const directorName = broadcastForm.querySelector('.directorname');
-            if(directorName.value === '' || directorName.value.replace(/\s/g, '') === ''){
+            if (directorName.value === '' || directorName.value.replace(/\s/g, '') === '') {
               broadcastSetting.validation = false;
             }
             // どのラジオボタンを選択しているか
-            const both           = broadcastForm.querySelector('.assignboth');
-            const graphics       = broadcastForm.querySelector('.assignonlygraphics');
-            const inviteSound    = broadcastForm.querySelector('.assigninvitesound');
-            const sound          = broadcastForm.querySelector('.assignonlysound');
+            const both = broadcastForm.querySelector('.assignboth');
+            const graphics = broadcastForm.querySelector('.assignonlygraphics');
+            const inviteSound = broadcastForm.querySelector('.assigninvitesound');
+            const sound = broadcastForm.querySelector('.assignonlysound');
             const inviteGraphics = broadcastForm.querySelector('.assigninvitegraphics');
-            if(both.checked           === true){broadcastSetting.assign = BROADCAST_ASSIGN.BOTH;}
-            if(graphics.checked       === true){broadcastSetting.assign = BROADCAST_ASSIGN.ONLY_GRAPHICS;}
-            if(inviteSound.checked    === true){broadcastSetting.assign = BROADCAST_ASSIGN.INVITE_SOUND;}
-            if(sound.checked          === true){broadcastSetting.assign = BROADCAST_ASSIGN.ONLY_SOUND;}
-            if(inviteGraphics.checked === true){broadcastSetting.assign = BROADCAST_ASSIGN.INVITE_GRAPHICS;}
+            if (both.checked === true) { broadcastSetting.assign = BROADCAST_ASSIGN.BOTH; }
+            if (graphics.checked === true) { broadcastSetting.assign = BROADCAST_ASSIGN.ONLY_GRAPHICS; }
+            if (inviteSound.checked === true) { broadcastSetting.assign = BROADCAST_ASSIGN.INVITE_SOUND; }
+            if (sound.checked === true) { broadcastSetting.assign = BROADCAST_ASSIGN.ONLY_SOUND; }
+            if (inviteGraphics.checked === true) { broadcastSetting.assign = BROADCAST_ASSIGN.INVITE_GRAPHICS; }
             // 入力内容に問題なければ各種変数を初期化し firebase 関連の初期化を行う
             currentDirectorId = null;
             friendDirectorId = null;
@@ -974,7 +974,7 @@ import 'firebase/analytics';
             shareURL = '';
             ownerURL = '';
             friendURL = '';
-            if(broadcastSetting.validation === true){
+            if (broadcastSetting.validation === true) {
               showDialog('please wait...', {
                 okDisable: true,
                 cancelDisable: true,
@@ -984,7 +984,7 @@ import 'firebase/analytics';
                 .then((res) => {
                   resolve(res);
                 });
-            }else{
+            } else {
               // 入力に不備があったら終了
               showDialog('screen name is blank.', {
                 okVisible: false,
@@ -998,17 +998,17 @@ import 'firebase/analytics';
           // ディレクター ID をキャッシュ
           currentDirectorId = res.directorId;
           return new Promise((resolve) => {
-            if(
+            if (
               broadcastSetting.assign === BROADCAST_ASSIGN.INVITE_SOUND ||
               broadcastSetting.assign === BROADCAST_ASSIGN.INVITE_GRAPHICS
-            ){
+            ) {
               // 誰かに移譲するパターンの場合はもうひとつ同じ名前を持つディレクターを作る
               fire.createDirector(currentDirectorName)
                 .then((friendRes) => {
                   friendDirectorId = friendRes.directorId;
                   resolve();
                 });
-            }else{
+            } else {
               // そうでない場合は即座に解決
               resolve();
             }
@@ -1018,10 +1018,10 @@ import 'firebase/analytics';
           // もしソースが正しく更新された状態であればそれを初期値としてチャンネルに設定する
           let graphicsSource = fragmenDefaultSource[currentMode];
           let soundSource = Onomat.FRAGMENT_SHADER_SOURCE_DEFAULT;
-          if(latestStatus === 'success'){
+          if (latestStatus === 'success') {
             graphicsSource = editor.getValue();
           }
-          if(latestAudioStatus === 'success'){
+          if (latestAudioStatus === 'success') {
             soundSource = audioEditor.getValue();
           }
           // チャンネルを生成
@@ -1045,7 +1045,7 @@ import 'firebase/analytics';
         .then(() => {
           // チャンネルにディレクター情報を登録する
           // directionMode が both 以外のときに friendDirectionMode が設定される（つまりフレンドがいる）
-          switch(broadcastSetting.assign){
+          switch (broadcastSetting.assign) {
             case BROADCAST_ASSIGN.BOTH:
               directionMode = BROADCAST_DIRECTION.BOTH;
               return fire.updateChannelDirector(currentChannelId, currentDirectorId, currentDirectorId);
@@ -1079,7 +1079,7 @@ import 'firebase/analytics';
             friendDirectorId,
           );
           // フレンドがいる場合は URL を生成する
-          if(friendDirectorId != null){
+          if (friendDirectorId != null) {
             friendURL = BASE_URL + '?' + generateFriendURL(
               currentMode,
               directionMode,
@@ -1092,23 +1092,23 @@ import 'firebase/analytics';
             showSyncScrollSwitch();
             hideAuthorBlock();
             // フレンドがいる場合は read only を設定した上でリスナーを登録
-            if(directionMode === BROADCAST_DIRECTION.SOUND && friendDirectorId != null){
+            if (directionMode === BROADCAST_DIRECTION.SOUND && friendDirectorId != null) {
               editor.setReadOnly(true);
               // グラフィックスを listen
               fire.listenChannelData(currentChannelId, (snap) => {
                 channelData = snap;
                 reflectGraphics(channelData);
               });
-            }else if(directionMode === BROADCAST_DIRECTION.GRAPHICS && friendDirectorId != null){
+            } else if (directionMode === BROADCAST_DIRECTION.GRAPHICS && friendDirectorId != null) {
               audioEditor.setReadOnly(true);
               // サウンドを listen
               fire.listenChannelData(currentChannelId, (snap) => {
                 channelData = snap;
                 reflectSound(channelData);
-                if(soundPlay !== channelData.sound.play){
+                if (soundPlay !== channelData.sound.play) {
                   soundPlay = channelData.sound.play;
                   // リモートの再生回数が変更になっていたら再生する
-                  if(latestAudioStatus !== 'success'){return;}
+                  if (latestAudioStatus !== 'success') { return; }
                   updateAudio(audioEditor.getValue(), true);
                 }
               });
@@ -1134,16 +1134,16 @@ import 'firebase/analytics';
 
           // リンクを含む DOM を生成してダイアログを表示
           const wrap = generateShareAnchor(ownerURL, friendURL, shareURL);
-          showDialog(wrap, {cancelVisible: false});
+          showDialog(wrap, { cancelVisible: false });
         })
         .catch((err) => {
           console.error('💣', err);
-          showDialog(err || 'Unknown Error', {cancelVisible: false});
+          showDialog(err || 'Unknown Error', { cancelVisible: false });
         });
     }, false);
 
     // URL から取得した情報に応じて配信かどうか判断しセットアップする
-    if(broadcastMode !== 'none'){
+    if (broadcastMode !== 'none') {
       channelData = null;
       starData = null;
       viewerData = null;
@@ -1169,8 +1169,8 @@ import 'firebase/analytics';
           counter.textContent = `${channelData.graphics.source.length}`;   // 文字数カウント
           audioEditor.setValue(channelData.sound.source);                  // サウンドシェーダのソースを復元
           audioCounter.textContent = `${channelData.sound.source.length}`; // 文字数カウント
-          setTimeout(() => {editor.gotoLine(1);}, 100);
-          setTimeout(() => {audioEditor.gotoLine(1);}, 100);
+          setTimeout(() => { editor.gotoLine(1); }, 100);
+          setTimeout(() => { audioEditor.gotoLine(1); }, 100);
           editor.setReadOnly(graphicsDisable);              // エディタの読み取り専用属性を設定
           audioEditor.setReadOnly(soundDisable);            // エディタの読み取り専用属性を設定
           updateStar(starData.count);                       // スターの内容を更新
@@ -1186,21 +1186,21 @@ import 'firebase/analytics';
             updateViewer(viewerData.count);
           });
           // 各配信モードごとの処理
-          switch(broadcastMode){
+          switch (broadcastMode) {
             case 'owner':
               // オーナーとしての復帰を完了したとみなしてフラグを立てなおす
               isDirectorInitialized = true;
               // 自分で立てた配信
-              if(directionMode === BROADCAST_DIRECTION.BOTH || directionMode === BROADCAST_DIRECTION.SOUND){
+              if (directionMode === BROADCAST_DIRECTION.BOTH || directionMode === BROADCAST_DIRECTION.SOUND) {
                 // サウンドが必要な場合自家製ダイアログを出しクリック操作をさせる
-                showDialog('Sound playback is enabled on this channel.', {cancelVisible: false})
+                showDialog('Sound playback is enabled on this channel.', { cancelVisible: false })
                   .then(() => {
                     // onomat を初期化
                     audioToggle.checked = true;
                     onomatSetting(false);
                   });
               }
-              if(directionMode === BROADCAST_DIRECTION.SOUND && friendDirectorId != null){
+              if (directionMode === BROADCAST_DIRECTION.SOUND && friendDirectorId != null) {
                 // 一部配信を受けることになるのでスクロール同期スイッチを表示
                 showSyncScrollSwitch();
                 hideAuthorBlock();
@@ -1209,7 +1209,7 @@ import 'firebase/analytics';
                   channelData = snap;
                   reflectGraphics(channelData);
                 });
-              }else if(directionMode === BROADCAST_DIRECTION.GRAPHICS && friendDirectorId != null){
+              } else if (directionMode === BROADCAST_DIRECTION.GRAPHICS && friendDirectorId != null) {
                 // 一部配信を受けることになるのでスクロール同期スイッチを表示
                 showSyncScrollSwitch();
                 hideAuthorBlock();
@@ -1217,10 +1217,10 @@ import 'firebase/analytics';
                 fire.listenChannelData(currentChannelId, (snap) => {
                   channelData = snap;
                   reflectSound(channelData);
-                  if(soundPlay !== channelData.sound.play){
+                  if (soundPlay !== channelData.sound.play) {
                     soundPlay = channelData.sound.play;
                     // リモートの再生回数が変更になっていたら再生する
-                    if(latestAudioStatus !== 'success'){return;}
+                    if (latestAudioStatus !== 'success') { return; }
                     updateAudio(audioEditor.getValue(), true);
                   }
                 });
@@ -1233,25 +1233,25 @@ import 'firebase/analytics';
               // フレンドとしての復帰を完了したとみなしてフラグを立てなおす
               isDirectorInitialized = true;
               // フレンドありに設定されている時点でサウンドは鳴る可能性がある
-              showDialog('Sound playback is enabled on this channel.', {cancelVisible: false})
+              showDialog('Sound playback is enabled on this channel.', { cancelVisible: false })
                 .then(() => {
                   // onomat を初期化
                   audioToggle.checked = true;
                   onomatSetting(false);
                 });
-              if(directionMode === BROADCAST_DIRECTION.SOUND){
+              if (directionMode === BROADCAST_DIRECTION.SOUND) {
                 // サウンドを listen
                 fire.listenChannelData(currentChannelId, (snap) => {
                   channelData = snap;
                   reflectSound(channelData);
-                  if(soundPlay !== channelData.sound.play){
+                  if (soundPlay !== channelData.sound.play) {
                     soundPlay = channelData.sound.play;
                     // リモートの再生回数が変更になっていたら再生する
-                    if(latestAudioStatus !== 'success'){return;}
+                    if (latestAudioStatus !== 'success') { return; }
                     updateAudio(audioEditor.getValue(), true);
                   }
                 });
-              }else if(directionMode === BROADCAST_DIRECTION.GRAPHICS){
+              } else if (directionMode === BROADCAST_DIRECTION.GRAPHICS) {
                 // グラフィックスを listen
                 fire.listenChannelData(currentChannelId, (snap) => {
                   channelData = snap;
@@ -1263,7 +1263,7 @@ import 'firebase/analytics';
               icon.classList.add('nevershow');
               break;
             case 'audience':
-              if(channelData.disc !== 'unknown'){
+              if (channelData.disc !== 'unknown') {
                 // 視聴ユーザーがサウンドの再生を許可したかどうか
                 let soundEnable = false;
                 // disc が unknown ではない場合、サウンドが更新される可能性がある
@@ -1283,14 +1283,14 @@ import 'firebase/analytics';
                   channelData = snap;
                   reflectGraphics(channelData);
                   reflectSound(channelData);
-                  if(soundEnable === true && soundPlay !== channelData.sound.play){
+                  if (soundEnable === true && soundPlay !== channelData.sound.play) {
                     soundPlay = channelData.sound.play;
                     // ユーザーが許可している & リモートの再生回数が変更になっていたら再生する
-                    if(audioToggle.checked !== true || latestAudioStatus !== 'success'){return;}
+                    if (audioToggle.checked !== true || latestAudioStatus !== 'success') { return; }
                     updateAudio(audioEditor.getValue(), true);
                   }
                 });
-              }else{
+              } else {
                 // サウンド以外のリスナーを設定
                 fire.listenChannelData(currentChannelId, (snap) => {
                   channelData = snap;
@@ -1333,19 +1333,19 @@ import 'firebase/analytics';
         })
         .catch((err) => {
           console.error('💣', err);
-          showDialog('Firebase Error', {cancelVisible: false});
+          showDialog('Firebase Error', { cancelVisible: false });
         });
     }
 
     // メニュー及びエディタが非表示の場合（フルスクリーンとは異なる点に注意）
-    if(isLayerHidden === true){toggleLayerView();}
+    if (isLayerHidden === true) { toggleLayerView(); }
 
   }, false);
 
   /**
    * ウィンドウリサイズ時の処理
    */
-  function resize(){
+  function resize() {
     const canvas = document.querySelector('#webgl');
     const bound = canvas.parentElement.getBoundingClientRect();
     canvas.width = bound.width;
@@ -1355,7 +1355,7 @@ import 'firebase/analytics';
   /**
    * レイヤービューの変更
    */
-  function toggleLayerView(){
+  function toggleLayerView() {
     canvasWrap.classList.toggle('fullheight');
     editorWrap.classList.toggle('invisible');
     fullIcon.classList.toggle('invisible');
@@ -1368,9 +1368,9 @@ import 'firebase/analytics';
     resize();
     fragmen.rect();
 
-    if(hideIcon.classList.contains('hide') === true){
+    if (hideIcon.classList.contains('hide') === true) {
       hideIcon.title = 'hide editor';
-    }else{
+    } else {
       hideIcon.title = 'show editor';
     }
   }
@@ -1378,7 +1378,7 @@ import 'firebase/analytics';
   /**
    * エディタビューの変更
    */
-  function toggleEditorView(){
+  function toggleEditorView() {
     const wrap = document.querySelector('#wrap');
     wrap.classList.toggle('overlay');
     editor.resize();
@@ -1390,8 +1390,8 @@ import 'firebase/analytics';
   /**
    * ローカルのオーディオファイルを読み込み及び再生
    */
-  function execMusician(){
-    if(musician == null){
+  function execMusician() {
+    if (musician == null) {
       musician = new Musician();
     }
     musician.loadFile()
@@ -1403,16 +1403,16 @@ import 'firebase/analytics';
   /**
    * シェーダのソースを更新
    */
-  function update(source){
-    if(fragmen == null){return;}
+  function update(source) {
+    if (fragmen == null) { return; }
     fragmen.render(source);
   }
 
   /**
    * シェーダのソースを更新
    */
-  function updateAudio(source, force){
-    if(onomat == null){return;}
+  function updateAudio(source, force) {
+    if (onomat == null) { return; }
     onomat.render(source, force);
   }
 
@@ -1420,16 +1420,16 @@ import 'firebase/analytics';
    * 更新を受けてグラフィックス側の状態を反映させる
    * @param {object} data - 更新データ
    */
-  function reflectGraphics(data){
+  function reflectGraphics(data) {
     fragmen.mode = currentMode = mode.selectedIndex = data.graphics.mode;
     const numbers = data.graphics.cursor.split('|');
-    if(editor.getValue() !== data.graphics.source){
+    if (editor.getValue() !== data.graphics.source) {
       editor.setValue(data.graphics.source);
     }
-    if(syncScroll === true){
+    if (syncScroll === true) {
       editor.gotoLine(parseInt(numbers[0]) + 1, parseInt(numbers[1]), true);
       editor.session.setScrollTop(parseInt(numbers[2]));
-    }else{
+    } else {
       editor.clearSelection();
     }
   }
@@ -1438,15 +1438,15 @@ import 'firebase/analytics';
    * 更新を受けてサウンド側の状態を反映させる
    * @param {object} data - 更新データ
    */
-  function reflectSound(data){
+  function reflectSound(data) {
     const numbers = data.sound.cursor.split('|');
-    if(audioEditor.getValue() !== data.sound.source){
+    if (audioEditor.getValue() !== data.sound.source) {
       audioEditor.setValue(data.sound.source);
     }
-    if(syncScroll === true){
+    if (syncScroll === true) {
       audioEditor.gotoLine(parseInt(numbers[0]) + 1, parseInt(numbers[1]), true);
       audioEditor.session.setScrollTop(parseInt(numbers[2]));
-    }else{
+    } else {
       audioEditor.clearSelection();
     }
   }
@@ -1459,7 +1459,7 @@ import 'firebase/analytics';
    * @param {function} onSelectionChange - selection change イベント用コールバック
    * @param {string} [theme='chaos'] - テーマ
    */
-  function editorSetting(id, source, onChange, onSelectionChange, theme = 'chaos'){
+  function editorSetting(id, source, onChange, onSelectionChange, theme = 'chaos') {
     const edit = ace.edit(id);
     edit.setTheme(`ace/theme/${theme}`);
     edit.session.setOption('indentedSoftWrap', false);
@@ -1480,7 +1480,7 @@ import 'firebase/analytics';
     edit.selection.on('changeSelection', onSelectionChange);
 
     // １行目にフォーカスしておく
-    setTimeout(() => {edit.gotoLine(1);}, 100);
+    setTimeout(() => { edit.gotoLine(1); }, 100);
     return edit;
   }
 
@@ -1493,7 +1493,7 @@ import 'firebase/analytics';
    * @param {number} [framerate=60] - capture framerate
    * @param {number} [quality=100] - capture quality
    */
-  function captureAnimation(frame = 180, width = 512, height = 256, format = 'gif', framerate = 60, quality = 100){
+  function captureAnimation(frame = 180, width = 512, height = 256, format = 'gif', framerate = 60, quality = 100) {
     // CCapture の初期化
     const ccapture = new CCapture({
       verbose: false,
@@ -1511,11 +1511,11 @@ import 'firebase/analytics';
     // キャプチャ用の canvas の生成と設定
     let captureCanvas = document.createElement('canvas');
     // document 上に存在しないと WebGL 側で初期化に失敗する
-    captureCanvas.width          = width;
-    captureCanvas.height         = height;
+    captureCanvas.width = width;
+    captureCanvas.height = height;
     captureCanvas.style.position = 'absolute';
-    captureCanvas.style.top      = '-9999px';
-    captureCanvas.style.left     = '-9999px';
+    captureCanvas.style.top = '-9999px';
+    captureCanvas.style.left = '-9999px';
     document.body.appendChild(captureCanvas);
     const option = Object.assign(FRAGMEN_OPTION, {
       target: captureCanvas,
@@ -1527,9 +1527,9 @@ import 'firebase/analytics';
     // 引数の指定フレーム数分レンダリングし GIF を生成
     let frameCount = 0;
     frag.onDraw(() => {
-      if(frameCount < frame){
+      if (frameCount < frame) {
         ccapture.capture(captureCanvas);
-      }else{
+      } else {
         frag.run = false;
         ccapture.stop();
         ccapture.save((blob) => {
@@ -1564,9 +1564,9 @@ import 'firebase/analytics';
    * audioToggle の状態によりエディタの表示・非表示を切り替え、場合により Onomat の初期化を行う
    * @param {boolean} [play=true] - そのまま再生まで行うかどうかのフラグ
    */
-  function onomatSetting(play = true){
+  function onomatSetting(play = true) {
     // onomat のインスタンスが既に存在するかどうか
-    if(onomat == null){
+    if (onomat == null) {
       // 存在しない場合生成を試みる
       onomat = new Onomat();
       // ビルド時のイベントを登録
@@ -1576,35 +1576,35 @@ import 'firebase/analytics';
         audioLineout.classList.remove('error');
         audioLineout.classList.add(res.status);
         audioMessage.textContent = res.message;
-        if(latestStatus === 'success' && latestAudioStatus === 'success'){
+        if (latestStatus === 'success' && latestAudioStatus === 'success') {
           link.classList.remove('disabled');
-        }else{
+        } else {
           link.classList.add('disabled');
         }
         // 配信中はステータスとは無関係に状態を送る
-        if(currentChannelId != null && (broadcastMode === 'owner' || broadcastMode === 'friend')){
+        if (currentChannelId != null && (broadcastMode === 'owner' || broadcastMode === 'friend')) {
           // グラフィックスを編集する立場かどうか
-          if(
+          if (
             (broadcastMode === 'owner' && directionMode !== BROADCAST_DIRECTION.GRAPHICS) ||
             (broadcastMode === 'friend' && directionMode === BROADCAST_DIRECTION.GRAPHICS)
-          ){
+          ) {
             updateSoundData(currentDirectorId, currentChannelId, soundPlay);
           }
         }
       });
       // 再生まで行うよう引数で指定されている場合は再生処理をタイマーで登録
-      if(play === true){
+      if (play === true) {
         setTimeout(() => {
           updateAudio(audioEditor.getValue(), true);
         }, 500);
       }
     }
     // 表示・非表示の切り替え
-    if(audioToggle.checked === true){
+    if (audioToggle.checked === true) {
       audioWrap.classList.remove('invisible');
       audioPlayIcon.classList.remove('disabled');
       audioStopIcon.classList.remove('disabled');
-    }else{
+    } else {
       audioWrap.classList.add('invisible');
       audioPlayIcon.classList.add('disabled');
       audioStopIcon.classList.add('disabled');
@@ -1618,7 +1618,7 @@ import 'firebase/analytics';
    * 配信用フォームの部品を生成する
    * @return {HTMLDivElement}
    */
-  function generateBroadcastForm(){
+  function generateBroadcastForm() {
     const wrap = document.createElement('div');
 
     const directorNameHeader = document.createElement('h3');
@@ -1700,7 +1700,7 @@ import 'firebase/analytics';
    * 配信用フォームの部品を生成する
    * @return {HTMLDivElement}
    */
-  function generateShareAnchor(ownerURL, friendURL, shareURL){
+  function generateShareAnchor(ownerURL, friendURL, shareURL) {
     const wrap = document.createElement('div');
     const directorHeader = document.createElement('h3');
     directorHeader.textContent = 'Director (You)';
@@ -1712,7 +1712,7 @@ import 'firebase/analytics';
     wrap.appendChild(directorHeader);
     wrap.appendChild(directorCaption);
     wrap.appendChild(directorAnchor);
-    if(friendURL != null && friendURL !== ''){
+    if (friendURL != null && friendURL !== '') {
       const friendHeader = document.createElement('h3');
       friendHeader.textContent = 'Co-Editor (Friend)';
       const friendCaption = document.createElement('div');
@@ -1742,7 +1742,7 @@ import 'firebase/analytics';
    * searchParams を取得する
    * @return {URLSearchParams}
    */
-  function getParameter(){
+  function getParameter() {
     return new URL(document.location).searchParams;
   }
 
@@ -1750,22 +1750,22 @@ import 'firebase/analytics';
    * 現在の状態を再現するための URL パラメータを生成し短縮 URL を取得する
    * @return {Promise} - 短縮 URL を取得すると解決する Promise
    */
-  function generatePermamentLink(){
+  function generatePermamentLink() {
     return new Promise((resolve, reject) => {
       let result = [];
-      if(latestStatus === 'success'){
+      if (latestStatus === 'success') {
         result.push(`ol=true`);
         result.push(`mode=${mode.value}`);
         result.push(`source=${encodeURIComponent(editor.getValue())}`);
-        if(audioToggle.checked === true){
-          if(latestAudioStatus === 'success'){
+        if (audioToggle.checked === true) {
+          if (latestAudioStatus === 'success') {
             result.push(`sound=true`);
             result.push(`soundsource=${encodeURIComponent(audioEditor.getValue())}`);
           }
         }
       }
       // 何らかのパラメータが付与された場合 URL に結合する
-      if(result.length > 0){
+      if (result.length > 0) {
         const param = result.join('&');
         const url = `${BASE_URL}?${param}`;
         generateUrl(url)
@@ -1778,7 +1778,7 @@ import 'firebase/analytics';
               json: json,
             });
           });
-      }else{
+      } else {
         reject();
       }
     });
@@ -1789,7 +1789,7 @@ import 'firebase/analytics';
    * @param {string} - もととなる URL
    * @return {Promise}
    */
-  function generateUrl(url){
+  function generateUrl(url) {
     const endpoint = 'https://api-ssl.bitly.com/v4/shorten';
     const headers = {
       'Content-Type': 'application/json',
@@ -1798,7 +1798,7 @@ import 'firebase/analytics';
     return fetch(endpoint, {
       method: 'post',
       headers, headers,
-      body: JSON.stringify({long_url: url}),
+      body: JSON.stringify({ long_url: url }),
     });
   }
 
@@ -1812,14 +1812,14 @@ import 'firebase/analytics';
    * @param {string} friendId - フレンドに設定するディレクター ID
    * @return {string}
    */
-  function generateDirectorURL(graphicsMode, directionMode, assign, directorId, channelId, friendId){
+  function generateDirectorURL(graphicsMode, directionMode, assign, directorId, channelId, friendId) {
     const currentState = [
       `mode=${graphicsMode}`,
       `dm=${directionMode}`,
       `ch=${channelId}`,
       `ow=true`,
     ];
-    switch(assign){
+    switch (assign) {
       case BROADCAST_ASSIGN.BOTH:
       case BROADCAST_ASSIGN.ONLY_GRAPHICS:
         currentState.push(`gd=${directorId}`);
@@ -1847,7 +1847,7 @@ import 'firebase/analytics';
    * @param {string} friendId - フレンドに設定するディレクター ID
    * @return {string}
    */
-  function generateFriendURL(graphicsMode, directionMode, assign, directorId, channelId, friendId){
+  function generateFriendURL(graphicsMode, directionMode, assign, directorId, channelId, friendId) {
     const currentState = [
       `mode=${graphicsMode}`,
       `dm=${directionMode}`,
@@ -1855,7 +1855,7 @@ import 'firebase/analytics';
       `ow=false`,
     ];
     // フレンド側での fd パラメータがチャンネルのオーナーディレクターとなる
-    switch(assign){
+    switch (assign) {
       case BROADCAST_ASSIGN.INVITE_SOUND:
         currentState.push(`sd=${friendId}`, `fd=${directorId}`);
         break;
@@ -1874,9 +1874,9 @@ import 'firebase/analytics';
    * @param {string} channelId - チャンネル ID
    * @param {number} mode - 現在のモード
    */
-  function updateGraphicsData(directorId, channelId, mode){
+  function updateGraphicsData(directorId, channelId, mode) {
     // ディレクターとしての初期化が完了していない場合リモートに送信しない
-    if(isDirectorInitialized !== true){return;}
+    if (isDirectorInitialized !== true) { return; }
     // カーソル位置やスクロール位置
     const cursor = editor.selection.getCursor();
     const scrollTop = editor.session.getScrollTop();
@@ -1894,9 +1894,9 @@ import 'firebase/analytics';
    * @param {string} channelId - チャンネル ID
    * @param {number} play - サウンドの再生回数
    */
-  function updateSoundData(directorId, channelId, play){
+  function updateSoundData(directorId, channelId, play) {
     // ディレクターとしての初期化が完了していない場合リモートに送信しない
-    if(isDirectorInitialized !== true){return;}
+    if (isDirectorInitialized !== true) { return; }
     // カーソル位置やスクロール位置
     const cursor = audioEditor.selection.getCursor();
     const scrollTop = audioEditor.session.getScrollTop();
@@ -1911,7 +1911,7 @@ import 'firebase/analytics';
   /**
    * スターアイコンを表示する
    */
-  function showStarIcon(){
+  function showStarIcon() {
     const wrap = document.querySelector('#stariconwrap');
     wrap.classList.add('visible');
   }
@@ -1919,7 +1919,7 @@ import 'firebase/analytics';
   /**
    * 視聴者アイコンを表示する
    */
-  function showViewerIcon(){
+  function showViewerIcon() {
     const wrap = document.querySelector('#eyeiconwrap');
     wrap.classList.add('visible');
   }
@@ -1927,7 +1927,7 @@ import 'firebase/analytics';
   /**
    * スクロール同期スイッチを表示する
    */
-  function showSyncScrollSwitch(){
+  function showSyncScrollSwitch() {
     const sync = document.querySelector('#syncscrollblock');
     sync.classList.remove('invisible');
   }
@@ -1935,7 +1935,7 @@ import 'firebase/analytics';
   /**
    * スターアイコンを非表示にする
    */
-  function hideStarIcon(){
+  function hideStarIcon() {
     const wrap = document.querySelector('#stariconwrap');
     wrap.classList.remove('visible');
   }
@@ -1943,7 +1943,7 @@ import 'firebase/analytics';
   /**
    * Author ブロックを非表示にする
    */
-  function hideAuthorBlock(){
+  function hideAuthorBlock() {
     const author = document.querySelector('#authorblock');
     author.classList.add('invisible');
   }
@@ -1952,13 +1952,13 @@ import 'firebase/analytics';
    * スターのカウントを更新する
    * @param {number} count - カウント
    */
-  function updateStar(count){
+  function updateStar(count) {
     const counter = document.querySelector('#starcounter');
     const overlay = document.querySelector('#staroverlay');
     overlay.classList.remove('popup');
     overlay.classList.add('visible');
     // 既に登録済みのタイマーがある場合はキャンセル
-    if(starCounterTimer != null){
+    if (starCounterTimer != null) {
       clearTimeout(starCounterTimer);
       counter.textContent = overlay.textContent = zeroPadding(count, 3);
     }
@@ -1972,14 +1972,14 @@ import 'firebase/analytics';
    * 視聴者数のカウントを更新する
    * @param {number} count - カウント
    */
-  function updateViewer(count){
+  function updateViewer(count) {
     const counter = document.querySelector('#eyecounter');
     const overlay = document.querySelector('#eyeoverlay');
     overlay.classList.remove('popup');
     overlay.classList.add('visible');
     const clamp = Math.max(count, 0);
     // 既に登録済みのタイマーがある場合はキャンセル
-    if(viewerCounterTimer != null){
+    if (viewerCounterTimer != null) {
       clearTimeout(viewerCounterTimer);
       counter.textContent = overlay.textContent = zeroPadding(clamp, 3);
     }
@@ -1995,7 +1995,7 @@ import 'firebase/analytics';
    * @param {number} count - 桁数
    * @return {string}
    */
-  function zeroPadding(number, count){
+  function zeroPadding(number, count) {
     const len = '' + number;
     return (new Array(count).join('0') + number).substr(-Math.max(count, len.length));
   }
@@ -2004,7 +2004,7 @@ import 'firebase/analytics';
    * メニューの状態を変更する
    * @param {string} directorName - ディレクター名
    */
-  function hideMenu(directorName){
+  function hideMenu(directorName) {
     const broadcastBlock = document.querySelector('#broadcastblock');
     broadcastBlock.classList.remove('invisible');
     const broadcastCaption = broadcastBlock.querySelector('.menublockinner');
@@ -2016,207 +2016,207 @@ import 'firebase/analytics';
     disableRegulation();
   }
 
-/**
- * モード選択ドロップダウンリストを disabled に設定する
- */
-function disableRegulation(){
-  const select = document.querySelector('#modeselect');
-  select.disabled = true;
-}
-
-/**
- * 自家製ダイアログを表示する
- * @param {string|HTMLElement} message - 表示するメッセージの文字列か append する DOM
- * @param {object}
- * @property {string} [okLabel='ok'] - ok ボタンに表示する文字列
- * @property {string} [cancelLabel='cancel'] - cancel ボタンに表示する文字列
- * @property {boolean} [okVisible=true] - ok ボタンを表示するかどうか
- * @property {boolean} [cancelVisible=true] - cancel ボタンを表示するかどうか
- * @property {boolean} [okDisable=false] - ok ボタンに disabled を設定するかどうか
- * @property {boolean} [cancelDisable=false] - cancel ボタンに disabled を設定するかどうか
- * @return {Promise} - ok, cancel のいずれかのボタンが押されたときに解決する Promise
- */
-function showDialog(message, option){
-  // ダイアログの各ボタンには、毎回イベントを設定してボタン押下時に解除する
-  const dialogOption = Object.assign({
-    okLabel: 'ok',
-    cancelLabel: 'cancel',
-    okVisible: true,
-    cancelVisible: true,
-    okDisable: false,
-    cancelDisable: false,
-  }, option);
-  return new Promise((resolve) => {
-    // ダイアログ上にメッセージを設定しレイヤを表示する
-    while(dialog.firstChild != null){
-      dialog.removeChild(dialog.firstChild);
-    }
-    // 文字列か DOM かによって分岐
-    if(message instanceof HTMLElement === true){
-      dialog.appendChild(message);
-    }else{
-      const sentence = message.split('\n');
-      sentence.forEach((s) => {
-        const div = document.createElement('div');
-        div.textContent = s;
-        dialog.appendChild(div);
-      });
-    }
-    const ok = document.querySelector('#dialogbuttonok');
-    const cancel = document.querySelector('#dialogbuttoncancel');
-    // 表示されるラベルの設定
-    ok.textContent = dialogOption.okLabel;
-    cancel.textContent = dialogOption.cancelLabel;
-    // 可視化するかどうかの設定
-    if(dialogOption.okVisible === true){
-      ok.classList.remove('invisible');
-    }else{
-      ok.classList.add('invisible');
-    }
-    if(dialogOption.cancelVisible === true){
-      cancel.classList.remove('invisible');
-    }else{
-      cancel.classList.add('invisible');
-    }
-    // disabled かどうかとイベントの付与
-    if(dialogOption.okDisable === true){
-      ok.classList.add('disabled');
-    }else{
-      ok.classList.remove('disabled');
-      const okClick = () => {
-        ok.removeEventListener('click', okClick);
-        resolve(true);
-        hideDialog();
-      };
-      ok.addEventListener('click', okClick, false);
-    }
-    if(dialogOption.cancelDisable === true){
-      cancel.classList.add('disabled');
-    }else{
-      cancel.classList.remove('disabled');
-      const cancelClick = () => {
-        cancel.removeEventListener('click', cancelClick);
-        resolve(false);
-        hideDialog();
-      };
-      cancel.addEventListener('click', cancelClick, false);
-    }
-
-    setLayerVisible(true);
-  });
-}
-
-/**
- * ダイアログ（及びレイヤ）を非表示にする
- */
-function hideDialog(){
-  setLayerVisible(false);
-}
-
-/**
- * フロートレイヤの表示状態を設定する
- * @param {boolean} visible - 表示するかどうかのフラグ
- */
-function setLayerVisible(visible){
-  if(visible === true){
-    layer.classList.add('visible');
-  }else{
-    layer.classList.remove('visible');
+  /**
+   * モード選択ドロップダウンリストを disabled に設定する
+   */
+  function disableRegulation() {
+    const select = document.querySelector('#modeselect');
+    select.disabled = true;
   }
-}
 
-/**
- * フルスクリーンを解除する（DOM 操作はしない）
- */
-function exitFullscreen(){
-  if(
-    document.fullscreenEnabled !== true &&
-    document.webkitFullscreenEnabled !== true
-  ){
-    return;
+  /**
+   * 自家製ダイアログを表示する
+   * @param {string|HTMLElement} message - 表示するメッセージの文字列か append する DOM
+   * @param {object}
+   * @property {string} [okLabel='ok'] - ok ボタンに表示する文字列
+   * @property {string} [cancelLabel='cancel'] - cancel ボタンに表示する文字列
+   * @property {boolean} [okVisible=true] - ok ボタンを表示するかどうか
+   * @property {boolean} [cancelVisible=true] - cancel ボタンを表示するかどうか
+   * @property {boolean} [okDisable=false] - ok ボタンに disabled を設定するかどうか
+   * @property {boolean} [cancelDisable=false] - cancel ボタンに disabled を設定するかどうか
+   * @return {Promise} - ok, cancel のいずれかのボタンが押されたときに解決する Promise
+   */
+  function showDialog(message, option) {
+    // ダイアログの各ボタンには、毎回イベントを設定してボタン押下時に解除する
+    const dialogOption = Object.assign({
+      okLabel: 'ok',
+      cancelLabel: 'cancel',
+      okVisible: true,
+      cancelVisible: true,
+      okDisable: false,
+      cancelDisable: false,
+    }, option);
+    return new Promise((resolve) => {
+      // ダイアログ上にメッセージを設定しレイヤを表示する
+      while (dialog.firstChild != null) {
+        dialog.removeChild(dialog.firstChild);
+      }
+      // 文字列か DOM かによって分岐
+      if (message instanceof HTMLElement === true) {
+        dialog.appendChild(message);
+      } else {
+        const sentence = message.split('\n');
+        sentence.forEach((s) => {
+          const div = document.createElement('div');
+          div.textContent = s;
+          dialog.appendChild(div);
+        });
+      }
+      const ok = document.querySelector('#dialogbuttonok');
+      const cancel = document.querySelector('#dialogbuttoncancel');
+      // 表示されるラベルの設定
+      ok.textContent = dialogOption.okLabel;
+      cancel.textContent = dialogOption.cancelLabel;
+      // 可視化するかどうかの設定
+      if (dialogOption.okVisible === true) {
+        ok.classList.remove('invisible');
+      } else {
+        ok.classList.add('invisible');
+      }
+      if (dialogOption.cancelVisible === true) {
+        cancel.classList.remove('invisible');
+      } else {
+        cancel.classList.add('invisible');
+      }
+      // disabled かどうかとイベントの付与
+      if (dialogOption.okDisable === true) {
+        ok.classList.add('disabled');
+      } else {
+        ok.classList.remove('disabled');
+        const okClick = () => {
+          ok.removeEventListener('click', okClick);
+          resolve(true);
+          hideDialog();
+        };
+        ok.addEventListener('click', okClick, false);
+      }
+      if (dialogOption.cancelDisable === true) {
+        cancel.classList.add('disabled');
+      } else {
+        cancel.classList.remove('disabled');
+        const cancelClick = () => {
+          cancel.removeEventListener('click', cancelClick);
+          resolve(false);
+          hideDialog();
+        };
+        cancel.addEventListener('click', cancelClick, false);
+      }
+
+      setLayerVisible(true);
+    });
   }
-  // 一度変数にキャッシュしたりすると Illegal invocation になるので直接呼ぶ
-  if(document.exitFullsScreen != null){
-    document.exitFullscreen();
-  }else if(document.webkitExitFullscreen != null){
-    document.webkitExitFullscreen();
+
+  /**
+   * ダイアログ（及びレイヤ）を非表示にする
+   */
+  function hideDialog() {
+    setLayerVisible(false);
   }
-}
 
-/**
- * フルスクリーンを解除後の DOM 操作とエディタ領域のリサイズのみを行う
- */
-function exitFullscreenMode(){
-  canvasWrap.classList.remove('fullscreen');
-  editorWrap.classList.remove('invisible');
-  iconColumn.classList.remove('invisible');
-  editor.resize();
-  audioEditor.resize();
-  resize();
-  fragmen.rect();
-}
-
-/**
- * フルスクリーンモードへ移行しエディタ領域をリサイズする
- */
-function requestFullscreenMode(){
-  if(
-    document.fullscreenEnabled !== true &&
-    document.webkitFullscreenEnabled !== true
-  ){
-    return;
-  }
-  // 一度変数にキャッシュしたりすると Illegal invocation になるので直接呼ぶ
-  if(document.body.requestFullscreen != null){
-    document.body.requestFullscreen();
-    canvasWrap.classList.add('fullscreen');
-    editorWrap.classList.add('invisible');
-    iconColumn.classList.add('invisible');
-  }else if(document.body.webkitRequestFullScreen != null){
-    document.body.webkitRequestFullScreen();
-    canvasWrap.classList.add('fullscreen');
-    editorWrap.classList.add('invisible');
-    iconColumn.classList.add('invisible');
-  }
-  editor.resize();
-  audioEditor.resize();
-  resize();
-  fragmen.rect();
-}
-
-/**
- * 引数から受け取った文字列をクリップボードにコピーする
- * @param {string} str - コピーしたい文字列
- */
-function copyToClipboard(str){
-  // textarea を生成して値を設定し文字列選択でコマンド発行
-  const t = document.createElement('textarea');
-  t.value = str;
-  document.body.appendChild(t);
-  t.select();
-  document.execCommand('copy');
-  // body 配下から削除
-  document.body.removeChild(t);
-}
-
-/**
- * uuid を生成する
- * @return {string}
- */
-function uuid(){
-  // https://github.com/GoogleChrome/chrome-platform-analytics/blob/master/src/internal/identifier.js
-  const chars = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.split('');
-  for(let i = 0, j = chars.length; i < j; i++){
-    switch(chars[i]){
-      case 'x':
-        chars[i] = Math.floor(Math.random() * 16).toString(16);
-        break;
-      case 'y':
-        chars[i] = (Math.floor(Math.random() * 4) + 8).toString(16);
-        break;
+  /**
+   * フロートレイヤの表示状態を設定する
+   * @param {boolean} visible - 表示するかどうかのフラグ
+   */
+  function setLayerVisible(visible) {
+    if (visible === true) {
+      layer.classList.add('visible');
+    } else {
+      layer.classList.remove('visible');
     }
   }
-  return chars.join('');
-}
+
+  /**
+   * フルスクリーンを解除する（DOM 操作はしない）
+   */
+  function exitFullscreen() {
+    if (
+      document.fullscreenEnabled !== true &&
+      document.webkitFullscreenEnabled !== true
+    ) {
+      return;
+    }
+    // 一度変数にキャッシュしたりすると Illegal invocation になるので直接呼ぶ
+    if (document.exitFullsScreen != null) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen != null) {
+      document.webkitExitFullscreen();
+    }
+  }
+
+  /**
+   * フルスクリーンを解除後の DOM 操作とエディタ領域のリサイズのみを行う
+   */
+  function exitFullscreenMode() {
+    canvasWrap.classList.remove('fullscreen');
+    editorWrap.classList.remove('invisible');
+    iconColumn.classList.remove('invisible');
+    editor.resize();
+    audioEditor.resize();
+    resize();
+    fragmen.rect();
+  }
+
+  /**
+   * フルスクリーンモードへ移行しエディタ領域をリサイズする
+   */
+  function requestFullscreenMode() {
+    if (
+      document.fullscreenEnabled !== true &&
+      document.webkitFullscreenEnabled !== true
+    ) {
+      return;
+    }
+    // 一度変数にキャッシュしたりすると Illegal invocation になるので直接呼ぶ
+    if (document.body.requestFullscreen != null) {
+      document.body.requestFullscreen();
+      canvasWrap.classList.add('fullscreen');
+      editorWrap.classList.add('invisible');
+      iconColumn.classList.add('invisible');
+    } else if (document.body.webkitRequestFullScreen != null) {
+      document.body.webkitRequestFullScreen();
+      canvasWrap.classList.add('fullscreen');
+      editorWrap.classList.add('invisible');
+      iconColumn.classList.add('invisible');
+    }
+    editor.resize();
+    audioEditor.resize();
+    resize();
+    fragmen.rect();
+  }
+
+  /**
+   * 引数から受け取った文字列をクリップボードにコピーする
+   * @param {string} str - コピーしたい文字列
+   */
+  function copyToClipboard(str) {
+    // textarea を生成して値を設定し文字列選択でコマンド発行
+    const t = document.createElement('textarea');
+    t.value = str;
+    document.body.appendChild(t);
+    t.select();
+    document.execCommand('copy');
+    // body 配下から削除
+    document.body.removeChild(t);
+  }
+
+  /**
+   * uuid を生成する
+   * @return {string}
+   */
+  function uuid() {
+    // https://github.com/GoogleChrome/chrome-platform-analytics/blob/master/src/internal/identifier.js
+    const chars = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.split('');
+    for (let i = 0, j = chars.length; i < j; i++) {
+      switch (chars[i]) {
+        case 'x':
+          chars[i] = Math.floor(Math.random() * 16).toString(16);
+          break;
+        case 'y':
+          chars[i] = (Math.floor(Math.random() * 4) + 8).toString(16);
+          break;
+      }
+    }
+    return chars.join('');
+  }
 
 })();

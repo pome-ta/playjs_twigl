@@ -1,3 +1,56 @@
+# mac log
+
+```
+% >npm start
+
+> @0.0.1 start /pome-ta/playjs_twigl
+> webpack-dev-server --mode development
+
+[ERR] `.bitly` not found.
+
+Launching app... http://localhost:9090
+
+[OK] development build
+ℹ ｢wds｣: Project is running at http://localhost:9090/
+ℹ ｢wds｣: webpack output is served from /js/
+ℹ ｢wds｣: Content not from webpack is served from /pome-ta/playjs_twigl/public
+ℹ ｢wdm｣: wait until bundle finished: /js/ace.js
+ℹ ｢wdm｣: wait until bundle finished: /js/CCapture.all.min.js
+ℹ ｢wdm｣: wait until bundle finished: /js/script.js?v=20211121
+ℹ ｢wdm｣: Hash: 198bdcea8f638b9240dd
+Version: webpack 4.46.0
+Time: 3390ms
+Built at: 2022/01/05 11:08:51
+    Asset      Size  Chunks             Chunk Names
+script.js  3.71 MiB  script  [emitted]  script
+Entrypoint script = script.js
+[0] multi ../node_modules/webpack-dev-server/client?http://localhost:9090 ./script.js 40 bytes {script} [built]
+[../node_modules/firebase/analytics/dist/index.esm.js] 68 bytes {script} [built]
+[../node_modules/firebase/app/dist/index.cjs.js] 1.04 KiB {script} [built]
+[../node_modules/firebase/database/dist/index.esm.js] 67 bytes {script} [built]
+[../node_modules/promise-polyfill/src/index.js] 5.99 KiB {script} [built]
+[../node_modules/webpack-dev-server/client/index.js?http://localhost:9090] ../node_modules/webpack-dev-server/client?http://localhost:9090 4.29 KiB {script} [built]
+[../node_modules/webpack-dev-server/client/overlay.js] 3.52 KiB {script} [built]
+[../node_modules/webpack-dev-server/client/socket.js] 1.53 KiB {script} [built]
+[../node_modules/webpack-dev-server/client/utils/createSocketUrl.js] 2.91 KiB {script} [built]
+[../node_modules/webpack-dev-server/client/utils/log.js] 964 bytes {script} [built]
+[../node_modules/webpack-dev-server/client/utils/reloadApp.js] 1.59 KiB {script} [built]
+[../node_modules/webpack-dev-server/client/utils/sendMessage.js] 402 bytes {script} [built]
+[../node_modules/webpack-dev-server/node_modules/strip-ansi/index.js] 161 bytes {script} [built]
+[../node_modules/webpack/hot sync ^\.\/log$] ../node_modules/webpack/hot sync nonrecursive ^\.\/log$ 170 bytes {script} [built]
+[./script.js] 91.6 KiB {script} [built]
+    + 44 hidden modules
+ℹ ｢wdm｣: Compiled successfully.
+
+```
+
+
+
+
+
+
+
+
 # webpack
 
 Pythonista で実行するときは、`build` が必要
