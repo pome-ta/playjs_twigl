@@ -10,6 +10,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/database';
 import 'firebase/analytics';
 
+console.log(Onomat);
 
 (() => {
   console.log('main');

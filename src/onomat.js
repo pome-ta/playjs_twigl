@@ -71,7 +71,7 @@ uniform float sampleRate;
      */
     constructor(){
         super();
-        console.log('onomat');
+        console.log(this);
 
         /**
          * WebGL 2.0 で初期化できたかどうか
